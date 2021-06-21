@@ -34,9 +34,6 @@ public class WebhookService {
     public String sonarQubeRequestProcess(SonarQubeRequestDTO sonarQubeRequestDTO) {
         if (sonarQubeRequestDTO.getQualityGate().getStatus().equals("ERROR")) {
 
-            boolean a = sonarQubeRequestDTO.getQualityGate().getStatus() == ("ERROR");
-
-
             DiscordResponseDTO discord = new DiscordResponseDTO();
             List<EmbedsDTO> embedlist = new ArrayList<>();
             int bugs = 0;
@@ -50,11 +47,10 @@ public class WebhookService {
 
             EmbedsDTO embedsDTO = new EmbedsDTO();
             embedsDTO.setColor(13294336);
-            if (bugs > 1) {
-
+            if (bugs >= 1) {
                 embedlist.add(new EmbedsDTO("O SonarQube identificou " + bugs + " novos BUG's! :detective:", "Veja os bugs abaixo:", 15158332));
-
                 List<Issues> issues = sonarResponse.getIssues();
+
                 for (int i = 0; i < issues.size(); i++) {
                     Issues issue = issues.get(i);
                     String mensagem = "```\n" + issue.getMessage() + "\n```";
@@ -66,8 +62,7 @@ public class WebhookService {
                 }
 
             } else {
-                embedsDTO.setTitle("O SonarQube identificou " + bugs + " novo BUG! :detective:");
-                embedsDTO.setDescription(bugs + "foi adicionado");
+                log.info("Não há mensagens para enviar!");
             }
 
             discord.setContent(null);
@@ -79,7 +74,6 @@ public class WebhookService {
             discordNotificationClient.discordPostWebhook(discord, "warley-bot-discordWebhook");
 
         }
-        log.info("Não houve erros no quality gate");
         return "OK!";
     }
 

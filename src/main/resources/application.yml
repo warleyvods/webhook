@@ -6,7 +6,7 @@ server:
 
 url:
   discord:
-    webhook: 'https://discord.com/api/webhooks/776448287918129183/-pOWy_BGKD7tuGLCKi1jwQsgn8YXI-hQ3hsZbal6SPN9WUs9hfMbjIbKxyY8N60g4LK0'
+    webhook: 'https://discord.com/api/webhooks/856600803821617162/vEXKGjH8fw3t3hCcOtVGLN4wIL8_dz6BqS-KNUTRMekgiquY67TJG_cRt-O9rNoE9kh8'
 
 sonar:
   url: 'https://sonar.kaizensolutions.com.br'
