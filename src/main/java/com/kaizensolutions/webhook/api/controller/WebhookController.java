@@ -20,9 +20,8 @@ public class WebhookController {
     }
 
     @PostMapping("/sonar")
-    public ResponseEntity<Void> sonarQubeWebhookRequest(@RequestBody SonarQubeRequestDTO sonarQubeRequestDTO) {
-        webhookService.sonarQubeRequestProcess(sonarQubeRequestDTO);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    public ResponseEntity<String> sonarQubeWebhookRequest(@RequestBody SonarQubeRequestDTO sonarQubeRequestDTO) {
+        return new ResponseEntity<>(webhookService.sonarQubeRequestProcess(sonarQubeRequestDTO), HttpStatus.OK);
     }
 
 

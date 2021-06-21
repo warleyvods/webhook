@@ -9,6 +9,7 @@ import com.kaizensolutions.webhook.api.models.SonarConfigs;
 import com.kaizensolutions.webhook.api.network.DiscordNotificationClient;
 import com.kaizensolutions.webhook.api.dto.sonar.request.SonarQubeRequestDTO;
 import com.kaizensolutions.webhook.api.network.SonarClient;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 
 @Service
+@Log4j2
 public class WebhookService {
 
     private final DiscordNotificationClient discordNotificationClient;
@@ -29,8 +31,13 @@ public class WebhookService {
         this.sonarConfigs = sonarConfigs;
     }
 
-    public void sonarQubeRequestProcess(SonarQubeRequestDTO sonarQubeRequestDTO) {
+    public String sonarQubeRequestProcess(SonarQubeRequestDTO sonarQubeRequestDTO) {
         if (sonarQubeRequestDTO.getQualityGate().getStatus().equals("ERROR")) {
+
+            boolean a = sonarQubeRequestDTO.getQualityGate().getStatus() == ("ERROR");
+            boolean b = sonarQubeRequestDTO.getQualityGate().getStatus() == ("ERROR");
+            boolean c = sonarQubeRequestDTO.getQualityGate().getStatus() == ("ERROR");
+            boolean d = sonarQubeRequestDTO.getQualityGate().getStatus() == ("ERROR");
 
             DiscordResponseDTO discord = new DiscordResponseDTO();
             List<EmbedsDTO> embedlist = new ArrayList<>();
@@ -39,6 +46,9 @@ public class WebhookService {
             bugs = getBugs(sonarQubeRequestDTO, bugs);
 
             SonarResponseDTO sonarResponse = getBug(sonarQubeRequestDTO);
+            if (sonarResponse.getIssues().isEmpty()) {
+                return null;
+            }
 
             EmbedsDTO embedsDTO = new EmbedsDTO();
             embedsDTO.setColor(13294336);
@@ -68,8 +78,10 @@ public class WebhookService {
 
 
             discordNotificationClient.discordPostWebhook(discord, "warley-bot-discordWebhook");
-        }
 
+        }
+        log.info("Não houve erros no quality gate");
+        return "OK!";
     }
 
     private int getBugs(SonarQubeRequestDTO sonarQubeRequestDTO, int bugs) {
