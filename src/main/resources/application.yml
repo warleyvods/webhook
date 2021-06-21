@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: webhook-kaizen
+
+url:
+  discord:
+    webhook: '--'
+
+logging.level.discord.MyClient: DEBUG
