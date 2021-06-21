@@ -9,7 +9,7 @@ public class Issues {
     private String severity;
     private String component;
     private String line;
-    private String mensage;
+    private String message;
     private String author;
 
 }

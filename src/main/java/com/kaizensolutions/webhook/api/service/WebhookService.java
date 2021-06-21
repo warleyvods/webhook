@@ -36,27 +36,24 @@ public class WebhookService {
             List<EmbedsDTO> embedlist = new ArrayList<>();
             int bugs = 0;
 
-            for (ConditionsDTO condition : sonarQubeRequestDTO.getQualityGate().getConditions()) {
-                if (condition.getMetric().equals("new_bugs") && condition.getStatus().equals("ERROR")) {
-                    bugs = Integer.parseInt(condition.getValue());
-                }
-            }
+            bugs = getBugs(sonarQubeRequestDTO, bugs);
 
             SonarResponseDTO sonarResponse = getBug(sonarQubeRequestDTO);
 
             EmbedsDTO embedsDTO = new EmbedsDTO();
             embedsDTO.setColor(13294336);
             if (bugs > 1) {
-                StringBuilder sb = new StringBuilder();
-                embedlist.add(new EmbedsDTO("O SonarQube identificou " + bugs + " novos BUG's! :detective:", "Veja os bugs abaixo:",  13294336));
+
+                embedlist.add(new EmbedsDTO("O SonarQube identificou " + bugs + " novos BUG's! :detective:", "Veja os bugs abaixo:", 13294336));
 
                 List<Issues> issues = sonarResponse.getIssues();
                 for (int i = 0; i < issues.size(); i++) {
                     Issues issue = issues.get(i);
-                    String text = "\n" + (i+1) + "º" + " Bug\n" + " Classe: " + issue.getComponent().replaceAll("^(.*[\\\\\\/])", "")
-                            + "\n" + "Linha: " + issue.getLine() + "\n" + "Autor do Bug: " + "<@" + authors().get(issue.getAuthor()) + ">";
+                    String text = "\n" + (i + 1) + "º" + " Bug\n" + " Classe: " + "**" + issue.getComponent().replaceAll("^(.*[\\\\\\/])", "") + "**"
+                            + "\n" + "Linha: " + "**" + issue.getLine() + "**" + "\n" + "Autor do Bug: " + "<@" + authors().get(issue.getAuthor()) + ">" +
+                            "\n```css\n Favor corrigir o bug o mais rápido possível! \n```";
 
-                    embedlist.add(new EmbedsDTO("Bug " + (i+1), text,  13294336));
+                    embedlist.add(new EmbedsDTO("Bug " + (i + 1), text, 13294336));
                 }
 
             } else {
@@ -75,13 +72,21 @@ public class WebhookService {
 
     }
 
+    private int getBugs(SonarQubeRequestDTO sonarQubeRequestDTO, int bugs) {
+        for (ConditionsDTO condition : sonarQubeRequestDTO.getQualityGate().getConditions()) {
+            if (condition.getMetric().equals("new_bugs") && condition.getStatus().equals("ERROR")) {
+                bugs = Integer.parseInt(condition.getValue());
+            }
+        }
+        return bugs;
+    }
+
     private SonarResponseDTO getBug(SonarQubeRequestDTO sonarQubeRequestDTO) {
         return sonarClient.sonarResponseIssue(sonarQubeRequestDTO.getProject().getKey(),
                 "OPEN,CONFIRMED,REOPENED",
                 "BUG",
                 sonarToken());
     }
-
 
     private String sonarToken() {
         String tokenBase = sonarConfigs.getToken() + ":";
