@@ -47,14 +47,14 @@ public class WebhookService {
                 return null;
             }
 
-            EmbedsDTO embedsDTO = new EmbedsDTO();
+            var embedsDTO = new EmbedsDTO();
             embedsDTO.setColor(13294336);
             if (bugs >= 1) {
                 embedlist.add(new EmbedsDTO("O SonarQube identificou " + bugs + " novos BUG's! :detective:", "Veja os bugs abaixo:", 15158332));
                 List<Issues> issues = sonarResponse.getIssues();
 
-                for (int i = 0; i < issues.size(); i++) {
-                    Issues issue = issues.get(i);
+                for (var i = 0; i < issues.size(); i++) {
+                    var issue = issues.get(i);
                     String mensagem = "```\n" + issue.getMessage() + "\n```";
                     String text = "\n" + " Bug\n" + " Classe: " + "**" + issue.getComponent().replaceAll("^(.*[\\\\\\/])", "") + "**"
                             + "\n" + "Linha: " + "**" + issue.getLine() + "**" + "\n" + "Autor do Bug: " + "<@" + authors().get(issue.getAuthor()) + ">" +
