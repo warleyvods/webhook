@@ -8,5 +8,6 @@ import lombok.Setter;
 public class ProjectDTO {
 
     private String name;
+    private String key;
 
 }

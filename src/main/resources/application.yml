@@ -6,4 +6,9 @@ url:
   discord:
     webhook: 'https://discord.com/api/webhooks/776448287918129183/-pOWy_BGKD7tuGLCKi1jwQsgn8YXI-hQ3hsZbal6SPN9WUs9hfMbjIbKxyY8N60g4LK0'
 
+sonar:
+  url: 'https://sonar.kaizensolutions.com.br'
+  token: '9c8d0fefd8291bbc420a5a91099ea8b08127c3c4'
+
+
 logging.level.discord.MyClient: DEBUG
