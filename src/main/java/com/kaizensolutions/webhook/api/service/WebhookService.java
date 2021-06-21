@@ -35,6 +35,7 @@ public class WebhookService {
         if (sonarQubeRequestDTO.getQualityGate().getStatus().equals("ERROR")) {
 
             boolean a = sonarQubeRequestDTO.getQualityGate().getStatus() == ("ERROR");
+            boolean b = sonarQubeRequestDTO.getQualityGate().getStatus() == ("ERROR");
 
             DiscordResponseDTO discord = new DiscordResponseDTO();
             List<EmbedsDTO> embedlist = new ArrayList<>();
