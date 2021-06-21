@@ -19,7 +19,8 @@ public class WebhookService {
     }
 
     public void sonarQubeRequestProcess(SonarQubeRequestDTO sonarQubeRequestDTO) {
-        if (sonarQubeRequestDTO.getStatus().equals("SUCCESS")) {
+        if (sonarQubeRequestDTO.getStatus() == ("SUCCESS")) {
+            boolean a = sonarQubeRequestDTO.getStatus() == ("SUCCESS");
 
             DiscordResponseDTO discord = new DiscordResponseDTO();
             EmbedsDTO embedsDTO = new EmbedsDTO();
