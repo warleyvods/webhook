@@ -35,9 +35,7 @@ public class WebhookService {
         if (sonarQubeRequestDTO.getQualityGate().getStatus().equals("ERROR")) {
 
             boolean a = sonarQubeRequestDTO.getQualityGate().getStatus() == ("ERROR");
-            boolean b = sonarQubeRequestDTO.getQualityGate().getStatus() == ("ERROR");
-            boolean c = sonarQubeRequestDTO.getQualityGate().getStatus() == ("ERROR");
-            boolean d = sonarQubeRequestDTO.getQualityGate().getStatus() == ("ERROR");
+
 
             DiscordResponseDTO discord = new DiscordResponseDTO();
             List<EmbedsDTO> embedlist = new ArrayList<>();
@@ -54,16 +52,17 @@ public class WebhookService {
             embedsDTO.setColor(13294336);
             if (bugs > 1) {
 
-                embedlist.add(new EmbedsDTO("O SonarQube identificou " + bugs + " novos BUG's! :detective:", "Veja os bugs abaixo:", 13294336));
+                embedlist.add(new EmbedsDTO("O SonarQube identificou " + bugs + " novos BUG's! :detective:", "Veja os bugs abaixo:", 15158332));
 
                 List<Issues> issues = sonarResponse.getIssues();
                 for (int i = 0; i < issues.size(); i++) {
                     Issues issue = issues.get(i);
-                    String text = "\n" + (i + 1) + "º" + " Bug\n" + " Classe: " + "**" + issue.getComponent().replaceAll("^(.*[\\\\\\/])", "") + "**"
+                    String mensagem = "```\n" + issue.getMessage() + "\n```";
+                    String text = "\n" + " Bug\n" + " Classe: " + "**" + issue.getComponent().replaceAll("^(.*[\\\\\\/])", "") + "**"
                             + "\n" + "Linha: " + "**" + issue.getLine() + "**" + "\n" + "Autor do Bug: " + "<@" + authors().get(issue.getAuthor()) + ">" +
                             "\n```css\n Favor corrigir o bug o mais rápido possível! \n```";
 
-                    embedlist.add(new EmbedsDTO("Bug " + (i + 1), text, 13294336));
+                    embedlist.add(new EmbedsDTO((i + 1) + "º Bug" + " - MENSAGEM: " + mensagem, text, 15158332));
                 }
 
             } else {
