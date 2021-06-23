@@ -11,6 +11,5 @@ public class SonarQubeRequestDTO {
     private ProjectDTO project;
     private BranchDTO branch;
     private QualityGateDTO qualityGate;
-//    private LocalDate analysedAt;
 
 }

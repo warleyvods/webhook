@@ -12,5 +12,4 @@ sonar:
   url: 'https://sonar.kaizensolutions.com.br'
   token: '9c8d0fefd8291bbc420a5a91099ea8b08127c3c4'
 
-logging.level.discord.MyClient: DEBUG
-
+#logging.level.discord.MyClient: DEBUG

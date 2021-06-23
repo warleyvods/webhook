@@ -1,8 +1,11 @@
 package com.kaizensolutions.webhook.api.dto.sonar.request;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class ConditionsDTO {
 
     private String metric;

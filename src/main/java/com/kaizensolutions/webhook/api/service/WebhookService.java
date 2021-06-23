@@ -6,7 +6,7 @@ import com.kaizensolutions.webhook.api.dto.sonar.request.ConditionsDTO;
 import com.kaizensolutions.webhook.api.dto.sonar.response.Issues;
 import com.kaizensolutions.webhook.api.dto.sonar.response.SonarResponseDTO;
 import com.kaizensolutions.webhook.api.models.SonarConfigs;
-import com.kaizensolutions.webhook.api.network.DiscordNotificationClient;
+import com.kaizensolutions.webhook.api.network.DiscordClient;
 import com.kaizensolutions.webhook.api.dto.sonar.request.SonarQubeRequestDTO;
 import com.kaizensolutions.webhook.api.network.SonarClient;
 import lombok.extern.log4j.Log4j2;
@@ -21,12 +21,13 @@ import java.util.List;
 @Log4j2
 public class WebhookService {
 
-    private final DiscordNotificationClient discordNotificationClient;
+    private final DiscordClient discordClient;
     private final SonarClient sonarClient;
     private final SonarConfigs sonarConfigs;
+    private static final String AGENT = "warley-bot-discordWebhook";
 
-    public WebhookService(DiscordNotificationClient discordNotificationClient, SonarClient sonarClient, SonarConfigs sonarConfigs) {
-        this.discordNotificationClient = discordNotificationClient;
+    public WebhookService(DiscordClient discordClient, SonarClient sonarClient, SonarConfigs sonarConfigs) {
+        this.discordClient = discordClient;
         this.sonarClient = sonarClient;
         this.sonarConfigs = sonarConfigs;
     }
@@ -34,31 +35,34 @@ public class WebhookService {
     public String sonarQubeRequestProcess(SonarQubeRequestDTO sonarQubeRequestDTO) {
         if (sonarQubeRequestDTO.getQualityGate().getStatus().equals("ERROR")) {
 
-            var discord = new DiscordResponseDTO();
+            DiscordResponseDTO discord = new DiscordResponseDTO();
             List<EmbedsDTO> embedlist = new ArrayList<>();
-            var bugs = 0;
+            int bugs = 0;
 
             bugs = getBugs(sonarQubeRequestDTO, bugs);
 
             SonarResponseDTO sonarResponse = getBug(sonarQubeRequestDTO);
             if (sonarResponse.getIssues().isEmpty()) {
+                log.info("Não há bugs na consulta de issues do sonar, então nao tem bugs!");
                 return null;
             }
 
-            var embedsDTO = new EmbedsDTO();
+            EmbedsDTO embedsDTO = new EmbedsDTO();
             embedsDTO.setColor(13294336);
             if (bugs >= 1) {
                 embedlist.add(new EmbedsDTO("O SonarQube identificou " + bugs + " novos BUG's! :detective:", "Veja os bugs abaixo:", 15158332));
-                List<Issues> issues = sonarResponse.getIssues();
 
-                for (var i = 0; i < issues.size(); i++) {
-                    var issue = issues.get(i);
+                List<Issues> issues = sonarResponse.getIssues();
+                for (int i = 0; i < issues.size(); i++) {
+                    Issues issue = issues.get(i);
+
                     String mensagem = "```\n" + issue.getMessage() + "\n```";
-                    String text = "\n" + " Bug\n" + " Classe: " + "**" + issue.getComponent().replaceAll("^(.*[\\\\\\/])", "") + "**"
-                            + "\n" + "Linha: " + "**" + issue.getLine() + "**" + "\n" + "Autor do Bug: " + "<@" + authors().get(issue.getAuthor()) + ">" +
+
+                    String description = "Classe: " + "**" + issue.getComponent().replaceAll("^(.*[\\\\\\/])", "") + "**"
+                            + "\nLinha: " + "**" + issue.getLine() + "**" + "\nAutor do Bug: " + "<@" + authors().get(issue.getAuthor()) + ">" +
                             "\n```css\n Favor corrigir o bug o mais rápido possível! \n```";
 
-                    embedlist.add(new EmbedsDTO((i + 1) + "º Bug" + " - MENSAGEM: " + mensagem, text, 15158332));
+                    embedlist.add(new EmbedsDTO((i + 1) + "º Bug - MENSAGEM: " + mensagem, description, 15158332));
                 }
 
             } else {
@@ -70,11 +74,11 @@ public class WebhookService {
             discord.setUsername("SonarQube - Kaizen Solutions");
             discord.setAvatar_url("https://user-images.githubusercontent.com/15386828/118396592-e331c880-b658-11eb-8fdc-7426520c691f.png");
 
-
-            discordNotificationClient.discordPostWebhook(discord, "warley-bot-discordWebhook");
-
+            //Agente obrigatorio, caso contrario o openfeign apresenta um erro 1001
+            discordClient.discordPostWebhook(discord, AGENT);
         }
-        return "OK!";
+        log.info("Não há mensagens!");
+        return "Tudo Ok!";
     }
 
     private int getBugs(SonarQubeRequestDTO sonarQubeRequestDTO, int bugs) {

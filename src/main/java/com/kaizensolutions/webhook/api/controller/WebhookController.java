@@ -24,5 +24,4 @@ public class WebhookController {
         return new ResponseEntity<>(webhookService.sonarQubeRequestProcess(sonarQubeRequestDTO), HttpStatus.OK);
     }
 
-
 }
