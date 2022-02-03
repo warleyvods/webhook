@@ -6,10 +6,10 @@ server:
 
 url:
   discord:
-    webhook: 'https://discord.com/api/webhooks/856600803821617162/vEXKGjH8fw3t3hCcOtVGLN4wIL8_dz6BqS-KNUTRMekgiquY67TJG_cRt-O9rNoE9kh8'
+    webhook: '${DISCORD_WEBHOOK}'
 
 sonar:
-  url: 'https://sonar.kaizensolutions.com.br'
-  token: '9c8d0fefd8291bbc420a5a91099ea8b08127c3c4'
+  url: '${SONAR_URL}'
+  token: '${TOKEN_SONAR}'
 
 #logging.level.discord.MyClient: DEBUG
