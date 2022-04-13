@@ -6,10 +6,10 @@ server:
 
 url:
   discord:
-    webhook: '${DISCORD_WEBHOOK}'
+    webhook: '${DISCORD_WEBHOOK:000}'
 
 sonar:
-  url: '${SONAR_URL}'
-  token: '${TOKEN_SONAR}'
+  url: '${SONAR_URL:000}'
+  token: '${TOKEN_SONAR:000}'
 
 #logging.level.discord.MyClient: DEBUG
